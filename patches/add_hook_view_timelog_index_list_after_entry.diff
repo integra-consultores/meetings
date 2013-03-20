@@ -1,0 +1,21 @@
+Index: app/views/timelog/_list.html.erb
+===================================================================
+--- app/views/timelog/_list.html.erb	(revisión: 64)
++++ app/views/timelog/_list.html.erb	(copia de trabajo)
+@@ -23,7 +23,7 @@
+ </thead>
+ <tbody>
+ <% entries.each do |entry| -%>
+-<tr class="time-entry <%= cycle("odd", "even") %> hascontextmenu">
++<tr class="time-entry <%= cycle("odd", "even") %> hascontextmenu" id="time-entry-<%= entry.id %>">
+ <td class="checkbox hide-when-print"><%= check_box_tag("ids[]", entry.id, false, :id => nil) %></td>
+ <td class="spent_on"><%= format_date(entry.spent_on) %></td>
+ <td class="user"><%= link_to_user(entry.user) %></td>
+@@ -48,6 +48,7 @@
+ <% end -%>
+ </td>
+ </tr>
++<%= call_hook(:view_timelog_index_list_after_entry, {:entry => entry}) %>
+ <% end -%>
+ </tbody>
+ </table>
