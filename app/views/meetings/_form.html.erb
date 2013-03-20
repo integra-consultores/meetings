@@ -1,0 +1,53 @@
+<%= labelled_fields_for :meeting, @meeting do |f| %>
+	<p>
+		<%= f.text_field :subject , :size => 80, :required => true %>
+	</p>
+	<p>
+		<%= f.label_for_field :description %>
+		  <%= link_to_function image_tag('edit.png'), '$(this).hide(); $("#meeting_description_and_toolbar").show()' unless @meeting.new_record? %>
+		  <%= content_tag 'span', :id => "meeting_description_and_toolbar", :style => (@meeting.new_record? ? nil : 'display:none') do %>
+		<%= f.text_area :description,
+		   :cols => 60,
+		   :rows => (@meeting.description.blank? ? 10 : [[10, @meeting.description.length / 50].max, 100].min),
+		   :accesskey => accesskey(:edit),
+		   :class => 'wiki-edit',
+		   :no_label => true %>
+		  <% end %>
+	</p>
+	<%= wikitoolbar_for 'meeting_description'%>
+	<div class="splitcontent">
+		<div class="splitcontentleft">
+			<% unless f.object.new_record? %>
+				<p><%= f.select :status, options_for_meeting_status %></p>
+			<% end %>
+			<p>
+				<%= f.text_field :date, :size => 10 %><%= calendar_for('meeting_date') %>
+			</p>
+			<p>
+				<%= label_tag :start_hour, l(:field_start_hour) %>
+				<%= f.time_select :start_hour, {:ampm => true, :include_blank => true, :minute_step => 15} %>
+			</p>
+		</div>
+		<div class="splitcontentright">		
+			<% unless f.object.new_record? %>
+				<p></p>	
+			<% end %>	
+			<p>
+				<%= f.text_field :estimated_hours , :size => 3 %>
+			</p>
+			<p>
+				<%= label_tag :end_hour, l(:field_end_hour) %>
+				<%= f.time_select :end_hour, {:ampm => true, :include_blank => true, :minute_step => 15} %>
+			</p>
+		</div>
+	</div>
+	<p id="issue">
+		<%= f.text_field :issue_id, :size => 10 %>
+	</p>
+		<%= javascript_tag "observeAutocompleteField('meeting_issue_id', '#{escape_javascript auto_complete_issues_path}')" %>
+	<p>
+		<%= label_tag :participants, l(:field_participants) %>
+		<%= select_tag "meeting[participant_ids][]", principals_options_for_select(@meeting.assignable_users, @meeting.participants) , :multiple => true %>
+	</p>
+		
+<% end %>

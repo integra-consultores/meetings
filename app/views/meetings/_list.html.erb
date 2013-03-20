@@ -1,0 +1,40 @@
+<%= hidden_field_tag 'back_url', url_for(params), :id => nil %>
+<div class="autoscroll">
+<table class="list meetings">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th><%= l(:field_status) %></th>
+      <% if @project.nil?%>
+      	<th><%= l(:field_project) %></th>
+      <% end %>
+      <th><%= l(:field_subject) %></th>
+      <th><%= l(:field_issue) %></th>
+      <th><%= l(:field_date) %></th>
+      <th><%= l(:field_start_hour) %></th>
+      <th><%= l(:field_end_hour) %></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+	<% meetings.each do |meeting| %>
+  		<tr id="meeting-<%= meeting.id %>" class="<%= cycle('odd', 'even') %>">
+    		<td class="id"><%= link_to meeting.id, meeting_path(meeting) %></td>
+    		<td class="status"><%= status_display_for meeting %></td>
+    		<% if @project.nil?%>
+				<td class="project"><%= link_to meeting.project.name , project_path(meeting.project) %></td>
+			<% end %>
+    		<td class="subject"><%= link_to meeting.subject , meeting_path(meeting) %></td>
+			<td class="issue"><%= link_to_issue(meeting.issue, :truncate => 50) unless meeting.issue.nil? %></td>
+    		<td class="date"><%= format_date meeting.date %></td>
+    		<td class="start_hour"><%= meeting.start_hour.strftime("%I:%M %p") rescue ""%></td>
+    		<td class="end_hour"><%= meeting.end_hour.strftime("%I:%M %p") rescue "" %></td>
+    		<td class="buttons">
+    			<%= link_to(l(:button_edit), edit_meeting_path(meeting), :class => 'icon icon-edit') if User.current.allowed_to?(:edit_meetings, meeting.project) %>
+    			<%= link_to(l(:button_delete), meeting_path(meeting), :method => :delete, :class => 'icon icon-del', :data => {:confirm => l(:text_are_you_sure)}) if User.current.allowed_to?(:delete_meetings, meeting.project) %>
+    		</td>
+  		</tr>
+  	<% end %>
+  </tbody>
+</table>
+</div>

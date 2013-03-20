@@ -1,0 +1,29 @@
+= meetings
+
+* Agrega un botón "Reuniones" accesible tanto a nivel de un proyecto en específico como cuando se está fuera del contexto de un menú (en mi página por ejemplo).
+* Al acceder al botón "Reuniones" fuera de un contexto de proyecto, muestra todas las reuniones en donde el usuario es participante o aquellas que él ha creado. Si el usuario es administrador, muestra todas las reuniones. Si el usuario no es administrador y no tiene permisos para ver reuniones en ningun proyecto, regresa error 403.
+* Al acceder al botón "Reuniones" dentro de un contexto de proyecto, muestra las reuniones, asociadas al proyecto en contexto, en donde el usuario es participante o aquellas que él ha creado. Si es administrador, muestra todas las reuniones asociadas al proyecto. Si el usuario no es administrador y no tiene permisos para ver reuniones en el proyecto, regresa error 403.
+* Al acceder al botón "Reuiones" dentro de un contexto de proyecto, muestra un botón para crear una nueva reunión (si el usuario tiene permisos). El formulario contiene:
+
+  * Asunto: String
+  * Descripción: Text con editor WYSIWYG
+  * Fecha: Permite elegir cualquier fecha
+  * Hora de inicio: Cualquier hora
+  * Hora de fin: Cualquier hora (no valida que hora fin > hora inicio)
+  * Tiempo estimado: Cualquier cantidad
+  * Petición relacionada: Seleccionable desde cualquier proyecto (no necesariamente visibles por el usuario ni en el proyecto de la reunión)
+  * Participantes: Seleccionable desde la lista de miembros del proyecto.
+  
+* Una vez creada una reunión, el creador de la misma, los participantes y los administradores podrán reportar tiempo en ella. Este tiempo se ve reflejado tanto en la reunión como en la petición relacionada (si existe).
+* Si el usuario tiene permisos para modificar las reuniones, podrá modificar cualquier campo de los mostrados en el formulario.
+* Si el usuario tiene permisos para borrar reuniones, podrá eliminar las reuniones que pueda ver si y solo si la reunión no tiene tiempo dedicado reportado.
+
+Comportamiento por revisar:
+
+* Al acceder al tiempo dedicado desde una reunión, el reporte no viene filtrado a solo los tiempos registrados en dicha reunión.
+* Al acceder a registrar tiempo desde una reunión, el botón seleccionado es el de peticiones y no el de reuniones
+* Cuando se elimina una petición en la que hay horas reportadas, se le pregunta al usuario que desea hacer con esas horas: eliminarlas, asignarlas al proyecto, reasignarlas a otro usuario. Si la petición está relacionada con alguna reunión, la relación entre la petición y la reunión se elimina PERO las horas reportadas en la reunión son actualizadas según indique el usuario al momento de eliminar la reunión pues a nivel de la base de datos, son las mismas entradas de tiempo.
+
+= dependencias
+
+Se debe aplicar el patch add_hook_view_timelog_index_list_after_entry.diff

@@ -1,0 +1,102 @@
+<%= render :partial => 'action_menu' %>
+
+<h2><%= l(:label_meeting_singular) %> #<%= @meeting.id %></h2>
+
+<div class="details issue meeting">
+  
+	<div class="subject">
+		<h3><%= @meeting.subject%></h3>
+	</div>
+    <p class="author">
+        <%= authoring @meeting.created_at, @meeting.author %>.
+        <% if @meeting.created_at != @meeting.updated_at %>
+        	<%= l(:label_updated_time, time_tag(@meeting.updated_at)).html_safe %>.
+        <% end %>
+    </p>
+
+	<table class="attributes">
+		<tbody>
+			<tr>
+				<th><%= l(:field_status) %>:</th>
+				<td><%= status_display_for @meeting %></td>
+				<th><%= l(:field_date) %>:</th>
+				<td><%= @meeting.date %></td>				
+			</tr>
+			<tr>
+				<th><%= l(:field_estimated_hours) %>:</th>
+				<td><%= @meeting.estimated_hours %></td>	
+				<th><%= l(:field_start_hour) %>:</th>
+				<td><%= @meeting.start_hour.strftime("%I:%M %p") rescue "" %></td>			
+				
+			</tr>
+			<tr>
+				<% if User.current.allowed_to?(:view_time_entries, @project) %>    				
+					<th><%= l(:label_spent_time) %>:</th>
+					<td>
+						<%= @meeting.total_spent_hours > 0 ? link_to( l_hours(@meeting.total_spent_hours), {:controller => 'timelog', :action => 'index', :project_id => @project, :meeting_id => @meeting}, :class => 'spent-time') : "-" %>						
+					</td>
+				<% else %>
+					<th></th><td></td>
+				<% end %>
+				<th><%= l(:field_end_hour) %>:</th>
+				<td><%= @meeting.end_hour.strftime("%I:%M %p") rescue "" %></td>
+			</tr>
+			<tr>
+				<th><%= l(:field_issue) %>:</th>
+				<td><%= link_to_issue(@meeting.issue) if @meeting.issue %></td>
+				<th></th>
+				<td></td>
+			</tr>
+			<tr>
+				<th><%= l(:field_participants) %>:</th>
+				<td colspan="3">
+					<%= @meeting.participants.sort.collect{|u| link_to_user u}.join(", ").html_safe %>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<% if @meeting.description? || @meeting.attachments.any? -%>
+	<hr />
+	<% if @meeting.description? %>
+	<div class="description">
+
+	  <div class="contextual">
+	  <%# link_to l(:button_quote),
+	              {:controller => 'journals', :action => 'new', :id => @meeting}, # ESTA LINEA CREA UN LINK A ISSUES Y NO A MEETINGS
+	              :remote => true,
+	              :method => 'post',
+	              :class => 'icon icon-comment' if authorize_for('meetings', 'edit') %>
+	  </div>
+	
+	  <p><strong><%=l(:field_description)%></strong></p>
+	  <div class="wiki">
+	  <%= textilizable @meeting, :description, :attachments => @meeting.attachments %>
+	  </div>
+	</div>
+	<% end %>
+	<%= link_to_attachments @meeting, :thumbnails => true %>
+	<% end -%>
+</div>
+
+<% if @journals.present? %>
+<div id="history">
+<h3><%=l(:label_history)%></h3>
+<%= render :partial => 'history', :locals => { :meeting => @meeting, :journals => @journals } %>
+</div>
+<% end %>
+
+<div style="clear: both;"></div>
+<%= render :partial => 'action_menu' %>
+
+<div style="clear: both;"></div>
+<% if authorize_for('meetings', 'edit') %>
+  <div id="update" style="display:none;">
+  <h3><%= l(:button_update) %></h3>
+  <%= render 'edit' %>
+  </div>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%# render :partial => 'meetings/sidebar' %>
+<% end %>

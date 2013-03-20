@@ -1,0 +1,21 @@
+<% for journal in journals %>
+  <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
+    <div id="note-<%= journal.indice %>">
+    <h4><%= link_to "##{journal.indice}", {:anchor => "note-#{journal.indice}"}, :class => "journal-link" %>
+    <%= avatar(journal.user, :size => "24") %>
+    <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %></h4>
+
+    <% if journal.details.any? %>
+    <ul class="details">
+      <% details_for_meeting_journal_to_strings(journal.details).each do |string| %>
+       <li><%= string %></li>
+      <% end %>
+    </ul>
+    <% end %>
+    <%= render_notes(meeting, journal) unless journal.notes.blank? %>
+    <script type="text/javascript">
+    	$("#change-<%= journal.id %> div.contextual").html("")
+    </script>
+    </div>
+  </div>
+<% end %>

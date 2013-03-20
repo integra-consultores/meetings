@@ -1,0 +1,17 @@
+<div class="contextual">
+  <%= link_to(l(:label_meeting_new), new_meeting_path(params[:project_id]), :class => 'icon icon-add') unless params[:project_id].nil? || !User.current.allowed_to?(:add_meetings, @project) %>
+</div>
+
+<h2><%= l(:label_meeting_plural)%></h2>
+
+<% if @meetings.empty? %>
+<p class="nodata"><%= l(:label_no_data) %></p>
+<% else %>
+<%= render :partial => 'meetings/list', :locals => {:meetings => @meetings} %>
+<p class="pagination"><%= pagination_links_full @meeting_pages, @meeting_count %></p>
+<% end %>
+
+<% content_for :sidebar do %>
+    <%= render :partial => 'meetings/sidebar' %>
+<% end %>
+

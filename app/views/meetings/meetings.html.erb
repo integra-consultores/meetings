@@ -1,0 +1,7 @@
+<%= raw @meetings.map {|meeting| {
+      'id' => meeting.id,
+      'label' => "#{l(:label_meeting)} ##{meeting.id}: #{truncate meeting.subject.to_s, :length => 60}",
+      'value' => meeting.id
+      }
+    }.to_json
+%>

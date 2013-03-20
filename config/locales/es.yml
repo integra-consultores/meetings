@@ -1,0 +1,26 @@
+es:
+  label_meeting: Reunión
+  label_meetings: Reuniones
+  label_meeting_singular: Reunión
+  label_meeting_plural: Reuniones
+  label_meeting_new: Nueva reunión
+  field_date: Fecha
+  field_start_hour: Hora de inicio
+  field_end_hour: Hora de fin
+  field_participants: Participantes
+  field_meeting: Reunión
+  notice_meeting_successful_create: Reunión creada
+  notice_meeting_with_time_entries: Reunión con tiempo dedicado no puede ser eliminada
+  permission_view_meetings: Ver reuniones
+  permission_add_meetings: Añadir reuniones
+  permission_edit_meetings: Modificar reuniones
+  permission_delete_meetings: Borrar reuniones
+  permission_add_meeting_notes: Añadir notas
+  project_module_meetings: Reuniones
+  status_pending: Pendiente
+  status_closed: Cerrada
+  status_cancelled: Cancelada
+  datetime:
+    prompts:
+      hour: Hora
+      minute: Minutos

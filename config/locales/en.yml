@@ -1,0 +1,26 @@
+en:
+  label_meeting: Meeting 
+  label_meetings: Meetings 
+  label_meeting_singular: Meeting 
+  label_meeting_plural: Meetings 
+  label_meeting_new: New Meeting 
+  field_date: Date 
+  field_start_hour: Start Time 
+  field_end_hour: End Time
+  field_participants: Participants 
+  field_meeting: Meeting 
+  notice_meeting_successful_create: Meeting created 
+  notice_meeting_with_time_entries: Meeting with time spent can not be eliminated 
+  permission_view_meetings: View meetings 
+  permission_add_meetings: Add meetings
+  permission_edit_meetings: Edit meetings
+  permission_delete_meetings: Delete meetings 
+  permission_add_meeting_notes: Add Notes
+  project_module_meetings: Meetings 
+  status_pending: Pending 
+  status_closed: Closed 
+  status_cancelled: Canceled
+  datetime:
+    prompts:
+      hour: Hour 
+      minute: Minute
