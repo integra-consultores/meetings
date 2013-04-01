@@ -1,4 +1,4 @@
-require 'project'
+require_dependency 'project'
 
 module Meetings
   

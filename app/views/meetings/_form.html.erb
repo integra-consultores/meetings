@@ -26,7 +26,11 @@
 			<p>
 				<%= label_tag :start_hour, l(:field_start_hour) %>
 				<%= f.time_select :start_hour, {:ampm => true, :include_blank => true, :minute_step => 15} %>
+			</p>			
+			<p id="issue">
+				<%= f.text_field :issue_id, :size => 10 %>
 			</p>
+			<%= javascript_tag "observeAutocompleteField('meeting_issue_id', '#{escape_javascript auto_complete_issues_path}')" %>
 		</div>
 		<div class="splitcontentright">		
 			<% unless f.object.new_record? %>
@@ -39,12 +43,11 @@
 				<%= label_tag :end_hour, l(:field_end_hour) %>
 				<%= f.time_select :end_hour, {:ampm => true, :include_blank => true, :minute_step => 15} %>
 			</p>
+			<p>
+				<%= f.text_field :location %>
+			</p>
 		</div>
 	</div>
-	<p id="issue">
-		<%= f.text_field :issue_id, :size => 10 %>
-	</p>
-		<%= javascript_tag "observeAutocompleteField('meeting_issue_id', '#{escape_javascript auto_complete_issues_path}')" %>
 	<p>
 		<%= label_tag :participants, l(:field_participants) %>
 		<%= select_tag "meeting[participant_ids][]", principals_options_for_select(@meeting.assignable_users, @meeting.participants) , :multiple => true %>

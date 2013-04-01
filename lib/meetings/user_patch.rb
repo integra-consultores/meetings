@@ -1,4 +1,4 @@
-require 'user'
+require_dependency 'user'
 
 module Meetings
   
@@ -10,12 +10,12 @@ module Meetings
 
       # Same as typing in the class 
       base.class_eval do
-        unloadable # Send unloadable so it will not be unloaded in development
+        #unloadable # Send unloadable so it will not be unloaded in development
 
-       has_many :authored_meetings, :class_name => "Meeting", :foreign_key => "author_id"
-       has_and_belongs_to_many :meetings
-       
-       before_destroy :remove_links_for_meetings_before_destroy
+        has_many :authored_meetings, :class_name => "Meeting", :foreign_key => "author_id"
+        has_and_belongs_to_many :meetings
+         
+        before_destroy :remove_links_for_meetings_before_destroy
       end
 
     end
@@ -35,6 +35,6 @@ end
 
 # Guards against including the module multiple time (like in tests)
 # and registering multiple callbacks
-unless User.included_modules.include? Meetings::UserPatch
+#unless User.included_modules.include? Meetings::UserPatch
   User.send(:include, Meetings::UserPatch)
-end
+#end

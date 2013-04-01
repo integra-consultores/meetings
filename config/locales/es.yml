@@ -9,6 +9,7 @@ es:
   field_end_hour: Hora de fin
   field_participants: Participantes
   field_meeting: Reunión
+  field_location: Ubicación
   notice_meeting_successful_create: Reunión creada
   notice_meeting_with_time_entries: Reunión con tiempo dedicado no puede ser eliminada
   permission_view_meetings: Ver reuniones
@@ -20,6 +21,7 @@ es:
   status_pending: Pendiente
   status_closed: Cerrada
   status_cancelled: Cancelada
+  text_meeting_added: "La reunión %{id} ha sido creada por %{author}."
   datetime:
     prompts:
       hour: Hora

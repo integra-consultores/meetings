@@ -1,6 +1,7 @@
 class Meeting < ActiveRecord::Base
   unloadable
   include Redmine::SafeAttributes
+  include MeetingsHelper
   
   # Meeting statuses
   STATUS_PENDING   = 0
@@ -27,6 +28,7 @@ class Meeting < ActiveRecord::Base
   before_save :set_default_status
   after_save :create_journal
   after_save :update_issue_ids_on_time_entries
+  after_create :send_notification_email
   
   safe_attributes 'status',
     'subject',
@@ -46,6 +48,7 @@ class Meeting < ActiveRecord::Base
     'notes',
     'issue_id',
     'participant_ids',
+    'location',
     :if => lambda {|meeting, user| meeting.new_record? || user.allowed_to?(:edit_meetings, meeting.project) }
 
   safe_attributes 'notes',
@@ -58,7 +61,17 @@ class Meeting < ActiveRecord::Base
     user.admin? ? 
     where(false) :
     self.includes(:participants).where("#{Meeting.table_name}.author_id = ? OR meetings_users.user_id = ?", user, user)
-  end 
+  end
+  
+  
+  # These methods are need to use in Mailer
+  def updated_on
+    updated_at
+  end
+  
+  def created_on
+    created_at
+  end
 
   # Safely sets attributes
   # Should be called from controllers instead of #attributes=
@@ -140,7 +153,15 @@ class Meeting < ActiveRecord::Base
   
   def to_s
     "#{l(:label_meeting)} ##{id}: #{subject}"
-  end    
+  end
+  
+  def recipients
+    [author].concat(participants).delete_if(&:nil?)
+  end
+  
+  def display_status
+    status_display_for self
+  end
   
   private
   
@@ -189,4 +210,8 @@ class Meeting < ActiveRecord::Base
     time_entries.update_all(:issue_id => issue_id)
   end
   
+  def send_notification_email
+    logger.info "Sending email about new meeting"
+    Mailer.meeting_add(self).deliver# if Setting.notified_events.include?('issue_added')
+  end
 end

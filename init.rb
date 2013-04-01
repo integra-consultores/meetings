@@ -1,12 +1,13 @@
 ActionDispatch::Callbacks.to_prepare do
   # require to refresh in development
   # require to load only when server starts
-  require 'meetings/user_patch'
   require 'meetings/project_patch'
   require 'meetings/time_entry_patch'
   require 'meetings/timelog_hooks'
   require 'meetings/time_report_patch'
   require 'meetings/issue_patch'
+  require 'meetings/mailer_patch'
+  require 'meetings/user_patch'
 end
 
 Redmine::Plugin.register :meetings do

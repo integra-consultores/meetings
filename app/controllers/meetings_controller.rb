@@ -15,6 +15,8 @@ class MeetingsController < ApplicationController
   helper :timelog
   helper :issues
   include IssuesHelper
+  helper :meetings
+  include MeetingsHelper
   
   def new
     @meeting = Meeting.new :project_id => @project.id

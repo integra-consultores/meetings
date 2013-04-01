@@ -8,7 +8,8 @@ en:
   field_start_hour: Start Time 
   field_end_hour: End Time
   field_participants: Participants 
-  field_meeting: Meeting 
+  field_meeting: Meeting
+  field_location: Location
   notice_meeting_successful_create: Meeting created 
   notice_meeting_with_time_entries: Meeting with time spent can not be eliminated 
   permission_view_meetings: View meetings 
@@ -20,6 +21,7 @@ en:
   status_pending: Pending 
   status_closed: Closed 
   status_cancelled: Canceled
+  text_meeting_added: "Meeting %{id} has been created by %{author}."
   datetime:
     prompts:
       hour: Hour 

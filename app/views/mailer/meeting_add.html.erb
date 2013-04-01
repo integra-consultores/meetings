@@ -1,0 +1,3 @@
+<%= l(:text_meeting_added, :id => "##{@meeting.id}", :author => h(@meeting.author)) %>
+<hr />
+<%= render :partial => 'meeting', :formats => [:html], :locals => { :meeting => @meeting, :meeting_url => @meeting_url } %>

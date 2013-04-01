@@ -1,0 +1,13 @@
+<%= "#{l(:label_meeting)} ##{meeting.id}: #{meeting.subject}" %>
+<%= meeting_url %>
+
+
+* <%=l(:field_author)%>: <%= meeting.author %>
+* <%=l(:field_status)%>: <%= meeting.display_status %>
+* <%=l(:field_date)%>: <%= meeting.date %>
+* <%=l(:field_start_hour)%>: <%= meeting.start_hour%>
+* <%=l(:field_end_hour)%>: <%= meeting.end_hour%>
+* <%=l(:field_estimated_hours)%>: <%= meeting.estimated_hours%>
+* <%=l(:field_location)%>: <%= meeting.location%>
+----------------------------------------
+<%= meeting.description %>

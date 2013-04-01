@@ -44,8 +44,8 @@
 			<tr>
 				<th><%= l(:field_issue) %>:</th>
 				<td><%= link_to_issue(@meeting.issue) if @meeting.issue %></td>
-				<th></th>
-				<td></td>
+				<th><%= l(:field_location) %>:</th>
+				<td><%= @meeting.location %></td>
 			</tr>
 			<tr>
 				<th><%= l(:field_participants) %>:</th>
