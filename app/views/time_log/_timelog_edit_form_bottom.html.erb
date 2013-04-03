@@ -1,0 +1,41 @@
+<div style="display:none">
+  <%= select_tag( "issue_or_meeting_id", 
+                options_for_select(
+                    {l(:label_issue) => "issue_id", 
+                      l(:label_meeting_singular) => "meeting_id"}, 
+                    time_entry.try(:meeting_id) ? "meeting_id" : "issue_id"
+                    ).gsub("\n","").html_safe,
+                 :onchange => 'toggle_issue_or_meeting_text_field();',
+                 :style => "margin-left: -180px;") 
+  %>
+</div>
+
+<%= javascript_tag do %>
+  function toggle_issue_or_meeting_text_field(){
+    not_selected = $("#time_entry_" + $("#issue_or_meeting_id option:not(:selected)").val() + "_container");
+    selected = $("#time_entry_" + $("#issue_or_meeting_id").val() + "_container");
+    
+    not_selected.hide();
+    not_selected.find("input").val("");
+    not_selected.find("em").html("");
+    selected.show();
+  }
+<% end %>
+
+
+
+<%= javascript_tag do %>
+  label_for_issue_id = $('label[for=time_entry_issue_id]');
+  paragraph = label_for_issue_id.parent();
+  
+  label_for_issue_id.remove();
+  $('#issue_or_meeting_id').prependTo(paragraph);
+  $('#issue_or_meeting_id').wrap('<label />');
+  paragraph.append(' <%= text_field_tag "time_entry[meeting_id]", time_entry.meeting_id, :size => 6 %><em><%= h(time_entry.meeting) if time_entry.meeting %></em>');
+  
+  $("#time_entry_issue_id").next().andSelf().wrapAll('<div id="time_entry_issue_id_container" />');
+  $("#time_entry_meeting_id").next().andSelf().wrapAll('<div id="time_entry_meeting_id_container" />');
+  
+  toggle_issue_or_meeting_text_field();
+  observeAutocompleteField('time_entry_meeting_id', '<%= escape_javascript auto_complete_meetings_path(:project_id => @project, :scope => (@project ? nil : 'all')) %>');
+<% end %>

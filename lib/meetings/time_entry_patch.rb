@@ -22,6 +22,8 @@ module Meetings
         validate :validate_meeting_id
         
         safe_attributes 'meeting_id'
+        
+        after_save :set_issue_id_according_to_meeting
       end
 
     end
@@ -29,6 +31,15 @@ module Meetings
     module InstanceMethods
       def validate_meeting_id
         errors.add :meeting_id, :invalid if (meeting_id && !meeting) || (meeting && project!=meeting.project)
+      end
+      
+      def set_issue_id_according_to_meeting
+        logger.debug "Setting issue id according to meeting"
+        if meeting_id
+          logger.debug "Updating issue id to #{meeting.issue_id}"
+          update_column "issue_id", meeting.issue_id
+        end
+        true
       end
     end
     

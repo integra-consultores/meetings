@@ -17,14 +17,7 @@ module Meetings
     
     # Add meeting_id field and javascript for autocomplete meeting_id
     # It should fix the menu_item depending on the url but it doesn't yet. 
-    def view_timelog_edit_form_bottom(context={})      
-      time_entry = context[:time_entry]
-      form = context[:form]
-      %Q{
-        <p>#{form.text_field :meeting_id, :size => 6}<em>#{h(time_entry.meeting) if time_entry.meeting}</em></p>
-        #{javascript_tag "observeAutocompleteField('time_entry_meeting_id', '#{escape_javascript auto_complete_meetings_path(:project_id => @project, :scope => (@project ? nil : 'all'))}')"}
-      }.html_safe      
-    end
+    render_on :view_timelog_edit_form_bottom, :partial => "time_log/timelog_edit_form_bottom"
     
     def view_time_entries_bulk_edit_details_bottom(context={})
       %Q{
