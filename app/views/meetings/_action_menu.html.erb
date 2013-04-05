@@ -1,5 +1,5 @@
 <div class="contextual">
 <%= link_to_if_authorized(l(:button_update), {:controller => 'meetings', :action => 'edit', :id => @meeting }, :onclick => 'showAndScrollTo("update", "meeting_notes"); return false;', :class => 'icon icon-edit', :accesskey => accesskey(:edit)) %>
-<%= link_to l(:button_log_time), new_meeting_time_entry_path(@meeting, :project_id => @project, :time_entry => {:meeting_id => @meeting}), :class => 'icon icon-time-add' if User.current.allowed_to?(:log_time, @project) %>
+<%= link_to l(:button_log_time), new_meeting_time_entry_path(@meeting, :time_entry => {:meeting_id => @meeting}), :class => 'icon icon-time-add' if User.current.allowed_to?(:log_time, @project) %>
 <%= link_to l(:button_delete), meeting_path(@meeting), :data => {:confirm => l(:text_are_you_sure)}, :method => :delete, :class => 'icon icon-del' if User.current.allowed_to?(:delete_meetings, @project) %>
 </div>

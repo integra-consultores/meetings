@@ -33,7 +33,7 @@
 				<% if User.current.allowed_to?(:view_time_entries, @project) %>    				
 					<th><%= l(:label_spent_time) %>:</th>
 					<td>
-						<%= @meeting.total_spent_hours > 0 ? link_to( l_hours(@meeting.total_spent_hours), {:controller => 'timelog', :action => 'index', :project_id => @project, :meeting_id => @meeting}, :class => 'spent-time') : "-" %>						
+						<%= @meeting.total_spent_hours > 0 ? link_to( l_hours(@meeting.total_spent_hours), project_meeting_time_entries_path(@project, @meeting), :class => 'spent-time') : "-" %>						
 					</td>
 				<% else %>
 					<th></th><td></td>

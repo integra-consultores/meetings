@@ -12,4 +12,14 @@ resources :meetings , :except => [:new] do
   end
 end
 
+resources :projects, :only => [] do
+  resources :meetings do
+    resources :time_entries, :controller => 'timelog' do
+      collection do
+        get 'report'
+      end
+    end
+  end
+end
+
 

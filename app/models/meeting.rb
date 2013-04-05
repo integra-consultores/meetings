@@ -65,6 +65,10 @@ class Meeting < ActiveRecord::Base
       scope.includes(:participants).where("#{Meeting.table_name}.author_id = ? OR meetings_users.user_id = ?", user, user)
   end
   
+  def visible?
+    Meeting.visible.include? self
+  end
+  
   # These methods are need to use in Mailer
   def updated_on
     updated_at

@@ -1,0 +1,79 @@
+Index: app/controllers/timelog_controller.rb
+===================================================================
+--- app/controllers/timelog_controller.rb	(revisión: 143)
++++ app/controllers/timelog_controller.rb	(copia de trabajo)
+@@ -33,6 +33,7 @@
+   helper :sort
+   include SortHelper
+   helper :issues
++  helper :meetings
+   include TimelogHelper
+   helper :custom_fields
+   include CustomFieldsHelper
+@@ -49,7 +50,9 @@
+     retrieve_date_range
+ 
+     scope = TimeEntry.visible.spent_between(@from, @to)
+-    if @issue
++    if @meeting
++      scope = scope.on_meeting(@meeting)
++    elsif @issue
+       scope = scope.on_issue(@issue)
+     elsif @project
+       scope = scope.on_project(@project, Setting.display_subprojects_issues?)
+@@ -271,6 +274,11 @@
+       @issue = Issue.find(issue_id)
+       @project ||= @issue.project
+     end
++    if (meeting_id = (params[:meeting_id] || params[:time_entry] && params[:time_entry][:meeting_id])).present?
++      @meeting = Meeting.find(meeting_id)
++      @issue = @meeting.issue
++      @project ||= @meeting.project
++    end
+   rescue ActiveRecord::RecordNotFound
+     render_404
+   end
+@@ -282,8 +290,12 @@
+     end
+   end
+ 
+-  def find_optional_project
+-    if !params[:issue_id].blank?
++  def find_optional_project    
++    if !params[:meeting_id].blank?
++      @meeting = Meeting.find(params[:meeting_id])
++      @issue = @meeting.issue
++      @project = @meeting.project
++    elsif !params[:issue_id].blank?
+       @issue = Issue.find(params[:issue_id])
+       @project = @issue.project
+     elsif !params[:project_id].blank?
+Index: app/helpers/timelog_helper.rb
+===================================================================
+--- app/helpers/timelog_helper.rb	(revisión: 143)
++++ app/helpers/timelog_helper.rb	(copia de trabajo)
+@@ -22,8 +22,8 @@
+ 
+   def render_timelog_breadcrumb
+     links = []
+-    links << link_to(l(:label_project_all), {:project_id => nil, :issue_id => nil})
+-    links << link_to(h(@project), {:project_id => @project, :issue_id => nil}) if @project
++    links << link_to(l(:label_project_all), {:project_id => nil, :issue_id => nil, :meeting_id => nil})
++    links << link_to(h(@project), {:project_id => @project, :issue_id => nil, :meeting_id => nil}) if @project
+     if @issue
+       if @issue.visible?
+         links << link_to_issue(@issue, :subject => false)
+@@ -31,6 +31,13 @@
+         links << "##{@issue.id}"
+       end
+     end
++    if @meeting
++      if @meeting.visible?
++        links << link_to_meeting(@meeting, :subject => false)
++      else
++        links << "##{@meeting.id}"
++      end
++    end
+     breadcrumb links
+   end
+ 
