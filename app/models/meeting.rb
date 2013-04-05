@@ -59,11 +59,11 @@ class Meeting < ActiveRecord::Base
     :if => lambda {|meeting, user| meeting.new_record? && user.allowed_to?(:set_meeting_notes_private, meeting.project)}
   
   def self.visible( user = User.current)
-    user.admin? ? 
-    where(false) :
-    self.includes(:participants).where("#{Meeting.table_name}.author_id = ? OR meetings_users.user_id = ?", user, user)
+    scope = self.includes(:project => :enabled_modules).where("#{EnabledModule.table_name}.name = ?", "meetings")
+    user.admin? ?
+      scope.where(nil) :
+      scope.includes(:participants).where("#{Meeting.table_name}.author_id = ? OR meetings_users.user_id = ?", user, user)
   end
-  
   
   # These methods are need to use in Mailer
   def updated_on

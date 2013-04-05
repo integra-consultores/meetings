@@ -91,7 +91,7 @@ class MeetingsController < ApplicationController
 
   def index
     query = Meeting.visible
-    query = query.where("project_id = ?", @project) if @project
+    query = query.where(:project_id => @project) if @project
     @limit = 25
     @meeting_count = query.count
     @meeting_pages = Paginator.new self, @meeting_count, @limit, params['page']
