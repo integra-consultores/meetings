@@ -1,22 +1,22 @@
 fr:
-  label_meeting: Rendez-vous
-  label_meetings: Rendez-vous
-  label_meeting_singular: Rendez-vous
-  label_meeting_plural: Rendez-vous
-  label_meeting_new: Nouveau rendez-vous
+  label_meeting: Réunion
+  label_meetings: Réunions
+  label_meeting_singular: Réunion
+  label_meeting_plural: Réunions
+  label_meeting_new: Nouvelle réunion
   field_date: Date 
   field_start_hour: Début 
   field_end_hour: Fin
   field_participants: Participants 
-  field_meeting: Rendez-vous
-  notice_meeting_successful_create: Rendez-vous créé
-  notice_meeting_with_time_entries: Un rendez-vous ne peut être supprimé si du temps a déjà été passé 
-  permission_view_meetings: Voir les rendez-vous
-  permission_add_meetings: Ajouter un rendez-vous
-  permission_edit_meetings: Editer un rendez-vous
-  permission_delete_meetings: Supprimer un rendez-vous
+  field_meeting: Réunion
+  notice_meeting_successful_create: Réunion créé
+  notice_meeting_with_time_entries: Une réunion ne peut être supprimée si du temps a déjà été passé 
+  permission_view_meetings: Voir les réunions
+  permission_add_meetings: Ajouter une réunion
+  permission_edit_meetings: Editer une réunion
+  permission_delete_meetings: Supprimer une réunion
   permission_add_meeting_notes: Ajouter une note
-  project_module_meetings: Rendez-vous
+  project_module_meetings: Réunion
   status_pending: En attente
   status_closed: Fermé
   status_cancelled: Annulé
