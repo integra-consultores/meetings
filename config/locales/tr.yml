@@ -1,0 +1,28 @@
+tr:
+  label_meeting: Randevu 
+  label_meetings: Randevular 
+  label_meeting_singular: Randevu 
+  label_meeting_plural: Randevular 
+  label_meeting_new: Yeni randevu 
+  field_date: Tarih 
+  field_start_hour: Başlangıç zamanı 
+  field_end_hour: Bitiş zamanı
+  field_participants: Katılımcılar 
+  field_meeting: Randevu
+  field_location: Yer
+  notice_meeting_successful_create: Randevu oluşturuldu 
+  notice_meeting_with_time_entries: İçinde zaman harcanmış randevu silinemez 
+  permission_view_meetings: Randevuları gör 
+  permission_add_meetings: Randevuları gör
+  permission_edit_meetings: Randevuları düzenle
+  permission_delete_meetings: Randevuları sil 
+  permission_add_meeting_notes: Not Ekle
+  project_module_meetings: Randevular 
+  status_pending: Bekliyor 
+  status_closed: Kapandı 
+  status_cancelled: İptal edildi
+  text_meeting_added: "%{author} tarafından %{id} numaralı yeni bir randevu oluşturuldu."
+  datetime:
+    prompts:
+      hour: Saat 
+      minute: Dakika
