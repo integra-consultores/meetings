@@ -28,6 +28,8 @@ class Meeting < ActiveRecord::Base
   
   validates :author, :project, :subject, :presence => true
   validates :subject, :length => {:maximum => 80}
+  validate :issue_is_visible, :unless => proc{ |meeting| meeting.issue_id.blank?}
+  validate :status_transition, :unless => proc{ User.current.admin }
   
   before_save :set_default_status
   after_save :create_journal
@@ -151,9 +153,12 @@ class Meeting < ActiveRecord::Base
         self.time_entries << @time_entry
       end
       
-      raise ActiveRecord::Rollback unless save
+      if save
+        true
+      else
+        raise ActiveRecord::Rollback
+      end
     end
-    true
   end
   
   # Returns a scope for journals that have an id greater than journal_id
@@ -241,6 +246,18 @@ class Meeting < ActiveRecord::Base
       time_entries.all do |te|
         te.touch
       end
+    end
+  end
+  
+  def status_transition
+    if status_changed? && status_was != STATUS_PENDING
+      errors.add(:status, l(:error_invalid_status_transition))
+    end
+  end
+  
+  def issue_is_visible
+    if issue_id && project && !project.issues.visible.include?(issue)
+      errors.add(:issue_id, :invalid)
     end
   end
 end

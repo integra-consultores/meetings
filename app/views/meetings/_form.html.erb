@@ -18,7 +18,7 @@
 	<div class="splitcontent">
 		<div class="splitcontentleft">
 			<% unless f.object.new_record? %>
-				<p><%= f.select :status, options_for_meeting_status %></p>
+				<p><%= f.select :status, options_for_meeting_status(f.object) %></p>
 			<% end %>
 			<p>
 				<%= f.text_field :date, :size => 10 %><%= calendar_for('meeting_date') %>

@@ -9,12 +9,12 @@ module MeetingsHelper
     end
   end
   
-  def options_for_meeting_status
-    [
-      [l(:status_pending), Meeting::STATUS_PENDING],
-       [l(:status_closed), Meeting::STATUS_CLOSED],
-       [l(:status_cancelled), Meeting::STATUS_CANCELLED]
-     ]
+  def options_for_meeting_status(meeting = nil)
+    options = []
+    options.push [l(:status_pending), Meeting::STATUS_PENDING] if !meeting || meeting.status == Meeting::STATUS_PENDING || User.current.admin?
+    options.push [l(:status_closed), Meeting::STATUS_CLOSED] if !meeting || [Meeting::STATUS_PENDING, Meeting::STATUS_CLOSED].include?( meeting.try(:status)) || User.current.admin?
+    options.push [l(:status_cancelled), Meeting::STATUS_CANCELLED] if !meeting || [Meeting::STATUS_PENDING, Meeting::STATUS_CANCELLED].include?( meeting.try(:status)) || User.current.admin?
+    options
   end
   
   def details_for_meeting_journal_to_strings(details, no_html=false, options={})

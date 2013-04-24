@@ -1,4 +1,5 @@
 es:
+  error_invalid_status_transition: solo puede pasar de 'Pendiente' a 'Cerrada' o 'Cancelada'
   label_meeting: Reunión
   label_meetings: Reuniones
   label_meeting_singular: Reunión

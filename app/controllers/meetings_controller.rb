@@ -78,7 +78,6 @@ class MeetingsController < ApplicationController
         @conflict_journals.reject!(&:private_notes?) unless User.current.allowed_to?(:view_private_notes, @meeting.project)
       end
     end
-    
     if saved
       render_attachment_warning_if_needed(@meeting)
       flash[:notice] = l(:notice_successful_update) unless @meeting.current_journal.new_record?
