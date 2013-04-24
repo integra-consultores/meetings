@@ -5,15 +5,15 @@ class MeetingQuery < Query
   @@operators_by_filter_type[:list_status].delete "c"
   
   @@available_columns = [
-    QueryColumn.new(:project, :sortable => "#{Project.table_name}.name", :groupable => true),
+    QueryColumn.new(:project, :groupable => true),
     QueryColumn.new(:status, :groupable => true),
-    QueryColumn.new(:subject, :sortable => "#{Meeting.table_name}.subject"),
-    QueryColumn.new(:author, :sortable => lambda {User.fields_for_order_statement("authors")}, :groupable => true),
-    QueryColumn.new(:participants, :sortable => lambda {User.fields_for_order_statement}, :groupable => true),
-    QueryColumn.new(:updated_at, :sortable => "#{Meeting.table_name}.updated_at", :default_order => 'desc'),
-    QueryColumn.new(:date, :sortable => "#{Meeting.table_name}.date"),
-    QueryColumn.new(:estimated_hours, :sortable => "#{Meeting.table_name}.estimated_hours"),
-    QueryColumn.new(:created_at, :sortable => "#{Meeting.table_name}.created_at", :default_order => 'desc'),
+    QueryColumn.new(:subject),
+    QueryColumn.new(:author, :groupable => true),
+    QueryColumn.new(:participants, :groupable => true),
+    QueryColumn.new(:updated_at, :default_order => 'desc'),
+    QueryColumn.new(:date),
+    QueryColumn.new(:estimated_hours),
+    QueryColumn.new(:created_at, :default_order => 'desc'),
     QueryColumn.new(:issue, :caption => :label_related_issues),
   ]
   cattr_reader :available_columns
@@ -21,6 +21,7 @@ class MeetingQuery < Query
   def initialize(attributes=nil, *args)
     super attributes, *args
     self.filters.delete 'status_id' if self.filters.respond_to? :delete
+    self.filters['status'] = {:operator => "=", :values => ["0"]}
     @is_for_all = project.nil?
   end
   

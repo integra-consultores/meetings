@@ -3,7 +3,7 @@
 <table class="list meetings">
   <thead>
     <tr>
-      <%= sort_header_tag('id', :caption => '#', :default_order => 'desc') %>
+      <th>#</th>
       <% query.inline_columns.each do |column| %>
         <%= column_header(column) %>
       <% end %>
