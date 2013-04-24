@@ -2,15 +2,47 @@
   <%= link_to(l(:label_meeting_new), new_meeting_path(params[:project_id]), :class => 'icon icon-add') unless params[:project_id].nil? || !User.current.allowed_to?(:add_meetings, @project) %>
 </div>
 
+
 <h2><%= l(:label_meeting_plural)%></h2>
 
-<% if @meetings.empty? %>
-<p class="nodata"><%= l(:label_no_data) %></p>
-<% else %>
-<%= render :partial => 'meetings/list', :locals => {:meetings => @meetings} %>
-<p class="pagination"><%= pagination_links_full @meeting_pages, @meeting_count %></p>
+<%= form_tag({ :controller => 'meetings', :action => 'index', :project_id => @project },
+            :method => :get, :id => 'query_form') do %>
+    <%= hidden_field_tag 'set_filter', '1' %>
+    <div id="query_form_content" class="hide-when-print">
+    <fieldset id="filters" class="collapsible <%= @query.new_record? ? "" : "collapsed" %>">
+      <legend onclick="toggleFieldset(this);"><%= l(:label_filter_plural) %></legend>
+      <div style="<%= @query.new_record? ? "" : "display: none;" %>">
+        <%= render :partial => 'queries/filters', :locals => {:query => @query} %>
+      </div>
+    </fieldset>
+    <fieldset class="collapsible collapsed">
+      <legend onclick="toggleFieldset(this);"><%= l(:label_options) %></legend>
+      <div style="display: none;">
+        <table>
+          <tr>
+            <td><%= l(:field_column_names) %></td>
+            <td><%= render :partial => 'queries/columns', :locals => {:query => @query} %></td>
+          </tr>
+        </table>
+      </div>
+    </fieldset>
+    </div>
+    <p class="buttons hide-when-print">
+
+    <%= link_to_function l(:button_apply), 'submit_query_form("query_form")', :class => 'icon icon-checked' %>
+    <%= link_to l(:button_clear), { :set_filter => 1, :project_id => @project }, :class => 'icon icon-reload'  %>
+    </p>
 <% end %>
 
+<%= error_messages_for 'query' %>
+<% if @query.valid? %>
+  <% if @meetings.empty? %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+  <% else %>
+  <%= render :partial => 'meetings/list', :locals => {:meetings => @meetings, :query => @query} %>
+  <p class="pagination"><%= pagination_links_full @meeting_pages, @meeting_count %></p>
+  <% end %>
+<% end %>
 <% content_for :sidebar do %>
     <%= render :partial => 'meetings/sidebar' %>
 <% end %>

@@ -10,6 +10,8 @@ es:
   field_participants: Participantes
   field_meeting: Reunión
   field_location: Ubicación
+  field_created_at: Creado(a) el
+  field_updated_at: Modificado(a) el
   notice_meeting_successful_create: Reunión creada
   notice_meeting_with_time_entries: Reunión con tiempo dedicado no puede ser eliminada
   permission_view_meetings: Ver reuniones

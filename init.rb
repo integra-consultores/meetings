@@ -14,7 +14,7 @@ Redmine::Plugin.register :meetings do
   name 'Meetings plugin'
   author 'Bishma Stornelli'
   description 'Plugin for managing meetings to allow users report time on meetings'
-  version '0.0.1'
+  version '0.0.2'
   
   menu :application_menu , 
         :meetings, {:controller => 'meetings', :action => 'index'}, 

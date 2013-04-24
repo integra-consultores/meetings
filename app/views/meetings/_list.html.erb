@@ -3,38 +3,39 @@
 <table class="list meetings">
   <thead>
     <tr>
-      <th>#</th>
-      <th><%= l(:field_status) %></th>
-      <% if @project.nil?%>
-      	<th><%= l(:field_project) %></th>
+      <%= sort_header_tag('id', :caption => '#', :default_order => 'desc') %>
+      <% query.inline_columns.each do |column| %>
+        <%= column_header(column) %>
       <% end %>
-      <th><%= l(:field_subject) %></th>
-      <th><%= l(:field_issue) %></th>
-      <th><%= l(:field_date) %></th>
-      <th><%= l(:field_start_hour) %></th>
-      <th><%= l(:field_end_hour) %></th>
-      <th></th>
     </tr>
   </thead>
+  <% previous_group = false %>
   <tbody>
-	<% meetings.each do |meeting| %>
-  		<tr id="meeting-<%= meeting.id %>" class="<%= cycle('odd', 'even') %>">
-    		<td class="id"><%= link_to meeting.id, meeting_path(meeting) %></td>
-    		<td class="status"><%= status_display_for meeting %></td>
-    		<% if @project.nil?%>
-				<td class="project"><%= link_to meeting.project.name , project_path(meeting.project) %></td>
-			<% end %>
-    		<td class="subject"><%= link_to meeting.subject , meeting_path(meeting) %></td>
-			<td class="issue"><%= link_to_issue(meeting.issue, :truncate => 50) unless meeting.issue.nil? %></td>
-    		<td class="date"><%= format_date meeting.date %></td>
-    		<td class="start_hour"><%= meeting.start_hour.strftime("%I:%M %p") rescue ""%></td>
-    		<td class="end_hour"><%= meeting.end_hour.strftime("%I:%M %p") rescue "" %></td>
-    		<td class="buttons">
-    			<%= link_to(l(:button_edit), edit_meeting_path(meeting), :class => 'icon icon-edit') if User.current.allowed_to?(:edit_meetings, meeting.project) %>
-    			<%= link_to(l(:button_delete), meeting_path(meeting), :method => :delete, :class => 'icon icon-del', :data => {:confirm => l(:text_are_you_sure)}) if User.current.allowed_to?(:delete_meetings, meeting.project) %>
-    		</td>
-  		</tr>
-  	<% end %>
+  	<% meetings.each do |meeting| -%>
+      <% if @query.grouped? && (group = @query.group_by_column.value()) != previous_group %>
+        <% reset_cycle %>
+        <tr class="group open">
+          <td colspan="<%= query.inline_columns.size + 2 %>">
+            <span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>
+            <%= group.blank? ? l(:label_none) : column_content(@query.group_by_column, ) %> <span class="count"><%= @_count_by_group[group] %></span>
+            <%= link_to_function("#{l(:button_collapse_all)}/#{l(:button_expand_all)}",
+                                 "toggleAllRowGroups(this)", :class => 'toggle-all') %>
+          </td>
+        </tr>
+        <% previous_group = group %>
+      <% end %>
+      <tr id="meeting-<%= meeting.id %>" class="<%= cycle('odd', 'even') %> <%= meeting.css_classes %>">
+        <td class="id"><%= link_to meeting.id, meeting_path(meeting) %></td>
+        <%= raw query.inline_columns.map {|column| "<td class=\"#{column.css_classes}\">#{column_content(column, meeting)}</td>"}.join %>
+      </tr>
+      <% @query.block_columns.each do |column|
+           if (text = column_content(column, meeting)) && text.present? -%>
+            <tr class="<%= current_cycle %>">
+              <td colspan="<%= @query.inline_columns.size + 2 %>" class="<%= column.css_classes %>"><%= text %></td>
+            </tr>
+          <% end -%>
+      <% end -%>
+    <% end -%>
   </tbody>
 </table>
 </div>

@@ -17,6 +17,10 @@ class MeetingsController < ApplicationController
   include IssuesHelper
   helper :meetings
   include MeetingsHelper
+  helper :meeting_queries
+  include MeetingQueriesHelper
+  helper :sort
+  include SortHelper
   
   def new
     @meeting = Meeting.new :project_id => @project.id
@@ -90,14 +94,26 @@ class MeetingsController < ApplicationController
   end
 
   def index
-    query = Meeting.visible
-    query = query.where(:project_id => @project) if @project
-    @limit = 25
-    @meeting_count = query.count
-    @meeting_pages = Paginator.new self, @meeting_count, @limit, params['page']
-    @offset ||= @meeting_pages.current.offset
-    
-    @meetings = query.limit(@limit).offset(@offset)
+    retrieve_query
+    sort_init(@query.sort_criteria.empty? ? [['id', 'desc']] : @query.sort_criteria)
+    sort_update(@query.sortable_columns)
+    @query.sort_criteria = sort_criteria.to_a
+
+    if @query.valid?
+      @limit = per_page_option
+      
+      @meeting_count = @query.meeting_count
+      @meeting_pages = Paginator.new self, @meeting_count, @limit, params['page']
+      @offset ||= @meeting_pages.current.offset
+      @meetings = @query.meetings(#:order => sort_clause,
+                              :offset => @offset,
+                              :limit => @limit)
+      @meeting_count_by_group = @query.meeting_count_by_group
+    else
+      respond_to do |format|
+        format.html { render(:template => 'meetings/index', :layout => !request.xhr?) }
+      end      
+    end
   end
 
   def destroy

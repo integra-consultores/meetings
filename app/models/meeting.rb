@@ -8,6 +8,10 @@ class Meeting < ActiveRecord::Base
   STATUS_CLOSED    = 1
   STATUS_CANCELLED = 2
   
+  STATUSES = { :pending => STATUS_PENDING,
+                :closed => STATUS_CLOSED,
+                :cancelled => STATUS_CANCELLED }
+  
   belongs_to :author, :class_name => "User", :foreign_key => "author_id" # nullified when author destroyed
   belongs_to :project # meetings destroyed when project destroyed
   belongs_to :issue # issue_id nullified when issue is destroyed (time_entries are updated according to users decision)
@@ -129,6 +133,11 @@ class Meeting < ActiveRecord::Base
     @total_spent_hours ||= TimeEntry.where(:meeting_id => id).sum(:hours).to_f
   end
   
+  # Returns the number of hours spent on this issue
+  def spent_hours
+    @spent_hours ||= time_entries.sum(:hours) || 0
+  end
+  
   # Saves a meeting and a time_entry from the parameters
   def save_meeting_with_child_records(params, existing_time_entry=nil)
     Meeting.transaction do
@@ -166,6 +175,13 @@ class Meeting < ActiveRecord::Base
   
   def display_status
     status_display_for self
+  end
+  
+  # Returns a string of css classes that apply to the issue
+  def css_classes
+    s = "meeting status-#{status}"
+    s << ' created-by-me' if User.current.logged? && author_id == User.current.id
+    s
   end
   
   private
