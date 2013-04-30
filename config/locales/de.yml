@@ -1,0 +1,28 @@
+﻿de:
+  label_meeting: Meeting 
+  label_meetings: Meetings 
+  label_meeting_singular: Meeting 
+  label_meeting_plural: Meetings 
+  label_meeting_new: Neues Meeting 
+  field_date: Datum
+  field_start_hour: Beginn 
+  field_end_hour: Ende
+  field_participants: Teilnehmer 
+  field_meeting: Meeting
+  field_location: Ort
+  notice_meeting_successful_create: Meeting erstellt 
+  notice_meeting_with_time_entries: Meeting mit gebuchtem Zeitaufwand kann nicht entfernt werden 
+  permission_view_meetings: Meetings anzeigen
+  permission_add_meetings: Meetings hinzufügen
+  permission_edit_meetings: Meetings bearbeiten
+  permission_delete_meetings: Meetings löschen 
+  permission_add_meeting_notes: Notizen hinzufügen
+  project_module_meetings: Meetings 
+  status_pending: Ausstehend 
+  status_closed: Geschlossen 
+  status_cancelled: Abgesagt
+  text_meeting_added: "Meeting %{id} wurde erstellt von %{author}."
+  datetime:
+    prompts:
+      hour: Stunde 
+      minute: Minute
