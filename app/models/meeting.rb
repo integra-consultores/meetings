@@ -177,7 +177,27 @@ class Meeting < ActiveRecord::Base
   def recipients
     [author].concat(participants).delete_if(&:nil?)
   end
-  
+   
+  def event_start_hour
+	date_string       = date.nil? ? "" : "#{date.strftime("%Y%m%d")}"
+	start_hour_string = start_hour.nil? ? "" : "#{start_hour.strftime("%H%M%S")}"
+	"#{date_string}T#{start_hour_string}" 
+  end
+
+  def event_end_hour
+	date_string     = date.nil? ? "" : "#{date.strftime("%Y%m%d")}"
+	end_hour_string = end_hour.nil? ? "" : "#{end_hour.strftime("%H%M%S")}"
+	"#{date_string}T#{end_hour_string}" 
+  end
+
+  # Returns the string of Local timezone 
+  def local_time_zone
+	zone_name = ActiveSupport::TimeZone::MAPPING.keys.find do |name|
+	  ActiveSupport::TimeZone[name].utc_offset == Time.now.utc_offset
+	end
+	ActiveSupport::TimeZone.find_tzinfo(zone_name).identifier
+  end 
+
   def display_status
     status_display_for self
   end
@@ -260,4 +280,5 @@ class Meeting < ActiveRecord::Base
       errors.add(:issue_id, :invalid)
     end
   end
+ 
 end

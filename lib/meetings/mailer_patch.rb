@@ -22,6 +22,7 @@ module Meetings
       # Example:
       #   meeting_add(meeting) => Mail::Message object
       #   Mailer.meeting_add(meeting).deliver => sends an email to meeting recipients
+      # This function now sends 'invite.ics' which acts as a calender invite provided the event times are well defined
       def meeting_add(meeting)
         redmine_headers 'Project' => meeting.project.identifier,
                         'Meeting-Id' => meeting.id,
@@ -33,17 +34,6 @@ module Meetings
         @meeting_url = url_for(:controller => 'meetings', :action => 'show', :id => meeting)
         recipients = meeting.recipients.map(&:mail)
 
-	zone_name = ActiveSupport::TimeZone::MAPPING.keys.find do |name|
-	  ActiveSupport::TimeZone[name].utc_offset == Time.now.utc_offset
-	end
-		
-	time_zone_str  = ActiveSupport::TimeZone.find_tzinfo(zone_name).identifier
-	date_str       = "#{meeting.date.strftime("%Y%m%d")}"
-	start_time_str = "#{meeting.start_hour.strftime("%H%M%S")}"
-	end_time_str   = "#{meeting.end_hour.strftime("%H%M%S")}"
-	dt_start       = "TZID=#{time_zone_str}:#{date_str}T#{start_time_str}" 
-	dt_end         = "TZID=#{time_zone_str}:#{date_str}T#{end_time_str}" 
-	
         cal = RiCal.Calendar do |cal|
           cal.prodid           = "REDMINE-MEETINGS-PLUGIN"
           cal.method_property  = ":REQUEST"
@@ -51,14 +41,15 @@ module Meetings
             event.dtstamp     = DateTime.now.utc
             event.summary     = meeting.subject
             event.description = meeting.description
-	    event.dtstart     = dt_start
-	    event.dtend       = dt_end
+	    event.dtstart     = "TZID=#{meeting.local_time_zone}:#{meeting.event_start_hour}"
+	    event.dtend       = "TZID=#{meeting.local_time_zone}:#{meeting.event_end_hour}"
             event.location    = meeting.location
             meeting.recipients.collect.sort.each do |user|
               event.add_attendee  user.mail
             end
             event.organizer   = meeting.author.mail
-            event.uid         = "B10AA0B0-0000-0000-#{"%012d" % meeting.id}"
+            event.uid         = "AEEADBAF-0000-0000-#{"%012d" % meeting.id}"
+	    # New meeting is always 'CONFIRMED' as per current design. Updates can have TENTATIVE/CANCEL
             event.status      = "CONFIRMED"
             event.class_property = ":PUBLIC"
             event.priority    = 5
@@ -72,6 +63,11 @@ module Meetings
         end
 
         attachments['invite.ics'] = {:mime_type => "text/calendar", :content => cal.to_s }
+        mail :to => recipients,
+          :subject => "[#{meeting.project.name} - #{l(:label_meeting)} ##{meeting.id}] #{meeting.subject}"
+
+      rescue RiCal::InvalidPropertyValue
+	# Incase we don't have proper values to generate 'invite.ics' - just send normal mail
         mail :to => recipients,
           :subject => "[#{meeting.project.name} - #{l(:label_meeting)} ##{meeting.id}] #{meeting.subject}"
       end
