@@ -22,6 +22,7 @@ en:
   status_closed: Closed 
   status_cancelled: Canceled
   text_meeting_added: "Meeting %{id} has been created by %{author}."
+  text_meeting_updated: "Meeting %{id} has been updated by %{user}." 
   datetime:
     prompts:
       hour: Hour 
