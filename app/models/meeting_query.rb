@@ -1,28 +1,36 @@
 class MeetingQuery < Query
   include MeetingsHelper
   
-  @@operators_by_filter_type[:list_status].delete "o"
-  @@operators_by_filter_type[:list_status].delete "c"
-  
-  @@available_columns = [
-    QueryColumn.new(:project, :groupable => true),
-    QueryColumn.new(:status, :groupable => true),
-    QueryColumn.new(:subject),
-    QueryColumn.new(:author, :groupable => true),
-    QueryColumn.new(:participants, :groupable => true),
-    QueryColumn.new(:updated_at, :default_order => 'desc'),
-    QueryColumn.new(:date),
-    QueryColumn.new(:estimated_hours),
-    QueryColumn.new(:created_at, :default_order => 'desc'),
-    QueryColumn.new(:issue, :caption => :label_related_issues),
-  ]
-  cattr_reader :available_columns
-
+  attr_reader :available_columns, :operators_by_filter_type
   def initialize(attributes=nil, *args)
     super attributes, *args
     self.filters.delete 'status_id' if self.filters.respond_to? :delete
     self.filters['status'] = {:operator => "=", :values => ["0"]}
     @is_for_all = project.nil?
+    
+    @available_columns = [
+      QueryColumn.new(:project, :groupable => true),
+      QueryColumn.new(:status, :groupable => true),
+      QueryColumn.new(:subject),
+      QueryColumn.new(:author, :groupable => true),
+      QueryColumn.new(:participants, :groupable => true),
+      QueryColumn.new(:updated_at, :default_order => 'desc'),
+      QueryColumn.new(:date),
+      QueryColumn.new(:estimated_hours),
+      QueryColumn.new(:created_at, :default_order => 'desc'),
+      QueryColumn.new(:issue, :caption => :label_related_issues),
+    ]
+    @operators_by_filter_type = { :list => [ "=", "!" ],
+                                 :list_status => [ "=", "!", "*" ],
+                                 :list_optional => [ "=", "!", "!*", "*" ],
+                                 :list_subprojects => [ "*", "!*", "=" ],
+                                 :date => [ "=", ">=", "<=", "><", "<t+", ">t+", "><t+", "t+", "t", "w", ">t-", "<t-", "><t-", "t-", "!*", "*" ],
+                                 :date_past => [ "=", ">=", "<=", "><", ">t-", "<t-", "><t-", "t-", "t", "w", "!*", "*" ],
+                                 :string => [ "=", "~", "!", "!~", "!*", "*" ],
+                                 :text => [  "~", "!~", "!*", "*" ],
+                                 :integer => [ "=", ">=", "<=", "><", "!*", "*" ],
+                                 :float => [ "=", ">=", "<=", "><", "!*", "*" ],
+                                 :relation => ["=", "=p", "=!p", "!p", "!*", "*"]}
   end
   
   def available_filters
