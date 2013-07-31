@@ -34,8 +34,8 @@ class Meeting < ActiveRecord::Base
   before_save :set_default_status
   after_save :create_journal
   after_save :update_issue_ids_on_time_entries
-  after_create :send_notification_email
   after_save :touch_all_time_entries
+  after_save :send_notification_email
   
   safe_attributes 'status',
     'subject',
@@ -257,8 +257,8 @@ class Meeting < ActiveRecord::Base
   end
   
   def send_notification_email
-    logger.info "Sending email about new meeting"
-    Mailer.meeting_add(self).deliver# if Setting.notified_events.include?('issue_added')
+    logger.info "Sending email about meeting update"
+    Mailer.meeting_save(self).deliver
   end
   
   def touch_all_time_entries

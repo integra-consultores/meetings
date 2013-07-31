@@ -4,8 +4,8 @@
 <li><%=l(:field_author)%>: <%=h meeting.author %></li>
 <li><%=l(:field_status)%>: <%=h(meeting.display_status) %></li>
 <li><%=l(:field_date)%>: <%=h meeting.date %></li>
-<li><%=l(:field_start_hour)%>: <%=h meeting.start_hour%></li>
-<li><%=l(:field_end_hour)%>: <%=h meeting.end_hour%></li>
+<li><%=l(:field_start_hour)%>: <%=h meeting.start_hour.strftime("%I:%M %p")%></li>
+<li><%=l(:field_end_hour)%>: <%=h meeting.end_hour.strftime("%I:%M %p")%></li>
 <li><%=l(:field_estimated_hours)%>: <%=h meeting.estimated_hours%></li>
 <li><%=l(:field_location)%>: <%=h meeting.location%></li>
 </ul>
