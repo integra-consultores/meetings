@@ -4,6 +4,7 @@ en:
   label_meeting_singular: Meeting 
   label_meeting_plural: Meetings 
   label_meeting_new: New Meeting 
+  field_status: Status
   field_date: Date 
   field_start_hour: Start Time 
   field_end_hour: End Time
