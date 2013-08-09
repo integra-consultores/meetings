@@ -4,6 +4,7 @@ en:
   label_meeting_singular: Meeting 
   label_meeting_plural: Meetings 
   label_meeting_new: New Meeting 
+  field_status: Status
   field_date: Date 
   field_start_hour: Start Time 
   field_end_hour: End Time
@@ -22,6 +23,7 @@ en:
   status_closed: Closed 
   status_cancelled: Canceled
   text_meeting_added: "Meeting %{id} has been created by %{author}."
+  text_meeting_updated: "Meeting %{id} has been updated by %{user}." 
   datetime:
     prompts:
       hour: Hour 

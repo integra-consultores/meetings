@@ -1,0 +1,14 @@
+<% if @journal_strings.empty? %>
+   <%= l(:text_meeting_added, :id => "##{@meeting.id}", :author => h(@meeting.author)) %>
+<% else %>
+   <%= l(:text_meeting_updated, :id => "##{@meeting.id}", :user => @updater) %>
+   <h3><%= "Meeting Updates [#{@journal_strings.length}]"%></h3>
+    <ul> 
+    <% @journal_strings.each do |string| %>
+      <li><%= string %></li> 
+    <% end %>
+    </ul>
+<% end %>
+
+<hr />
+<%= render :partial => 'meeting', :formats => [:html], :locals => { :meeting => @meeting, :meeting_url => @meeting_url } %>
