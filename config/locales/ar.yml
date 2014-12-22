@@ -1,0 +1,30 @@
+en:
+  label_meeting:  اجتماع 
+  label_meetings: اجتماعات 
+  label_meeting_singular: اجتماع 
+  label_meeting_plural: اجتماعات 
+  label_meeting_new: اجتماع جديد 
+  field_status: الحالة
+  field_date: التاريخ 
+  field_start_hour: وقت البدء 
+  field_end_hour: وقت الانتهاء
+  field_participants: المشاركين 
+  field_meeting: اجتماع
+  field_location: الموقع
+  notice_meeting_successful_create: تم انشاء الاجتماع 
+  notice_meeting_with_time_entries: Meeting with time spent can not be eliminated 
+  permission_view_meetings: مشاهدة الاجتماعات 
+  permission_add_meetings: اضافة اجتماع
+  permission_edit_meetings: تعديل الاجتماع
+  permission_delete_meetings: ازالة الاجتماع 
+  permission_add_meeting_notes: اضافة مﻻحظة
+  project_module_meetings: اجتماعات 
+  status_pending: معلق 
+  status_closed: افلقة 
+  status_cancelled: ألغيت
+  text_meeting_added: "اجتماع %{id} لفد تم انشاء بواسطة %{author}."
+  text_meeting_updated: "اجتماع %{id} لقد تم التحديث بواسطة %{user}." 
+  datetime:
+    prompts:
+      hour: ساعة 
+      minute: دقيقة
